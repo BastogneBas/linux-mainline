@@ -30,7 +30,7 @@ validpgpkeys=(
   '8218F88849AAC522E94CF470A5E9288C4FA415FA'  # Jan Alexander Steffens (heftig)
 )
 sha256sums=('SKIP'
-            '588a2eb551397cd6b5cfc2434fb6936819779f43ff03f112289e17fa08390ca9'
+            '4c59fca553d367b472b43fa8c6bed60056d6d913a5f9067a929e10e16688dd30'
             'ae2e95db94ef7176207c690224169594d49445e04249d2499e9d2fbc117a0b21'
             '834bd254b56ab71d73f59b3221f056c72f559553c04718e350ab2a3e2991afe0'
             'ad6344badc91ad0630caacde83f7f9b97276f80d26a20619a87952be65492c65')
@@ -57,7 +57,9 @@ prepare() {
 
   msg2 "Setting config..."
   cp ../config .config
-  make olddefconfig
+  #make olddefconfig
+  #make oldconfig
+  make nconfig
 
   make -s kernelrelease > ../version
   msg2 "Prepared %s version %s" "$pkgbase" "$(<../version)"
@@ -65,7 +67,7 @@ prepare() {
 
 build() {
   cd $_srcname
-  make bzImage modules htmldocs
+  make -j 8 bzImage modules htmldocs
 }
 
 _package() {
