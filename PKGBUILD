@@ -8,8 +8,8 @@
 
 pkgbase=linux-mainline               # Build stock -ARCH kernel
 #pkgbase=linux-custom       # Build kernel with a different name
-_tag=v4.20-rc5
-pkgver=4.20rc5
+_tag=v5.0-rc1
+pkgver=5.0-rc1
 pkgrel=1
 arch=(x86_64)
 url="https://git.archlinux.org/linux.git/log/?h=v$_srcver"
@@ -17,6 +17,7 @@ license=(GPL2)
 makedepends=(xmlto kmod inetutils bc libelf git python-sphinx graphviz)
 options=('!strip')
 _srcname=linux-mainline
+threads=8
 source=(
   "$_srcname::git+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git#tag=$_tag"
   config         # the main kernel config file
@@ -30,7 +31,7 @@ validpgpkeys=(
   '8218F88849AAC522E94CF470A5E9288C4FA415FA'  # Jan Alexander Steffens (heftig)
 )
 sha256sums=('SKIP'
-            '4c59fca553d367b472b43fa8c6bed60056d6d913a5f9067a929e10e16688dd30'
+            'bed444273e6e896accfed7624edd51c0daf72cd82d4db31cf3b56dc8e74cf1de'
             'ae2e95db94ef7176207c690224169594d49445e04249d2499e9d2fbc117a0b21'
             '834bd254b56ab71d73f59b3221f056c72f559553c04718e350ab2a3e2991afe0'
             'ad6344badc91ad0630caacde83f7f9b97276f80d26a20619a87952be65492c65')
@@ -43,6 +44,9 @@ prepare() {
 
   msg2 "Setting version..."
   scripts/setlocalversion --save-scmversion
+  
+  msg2 "Number of threads: $threads"
+
   #echo "-$pkgrel" > localversion.10-pkgrel
   echo "$_kernelname" > localversion.20-pkgname
 
@@ -59,15 +63,15 @@ prepare() {
   cp ../config .config
   #make olddefconfig
   #make oldconfig
-  make nconfig
+  make -j $threads nconfig
 
-  make -s kernelrelease > ../version
+  make -j $threads -s kernelrelease > ../version
   msg2 "Prepared %s version %s" "$pkgbase" "$(<../version)"
 }
 
 build() {
   cd $_srcname
-  make -j 8 bzImage modules htmldocs
+  make -j $threads bzImage modules htmldocs
 }
 
 _package() {
@@ -88,7 +92,7 @@ _package() {
   msg2 "Installing modules..."
   local modulesdir="$pkgdir/usr/lib/modules/$kernver"
   mkdir -p "$modulesdir"
-  make INSTALL_MOD_PATH="$pkgdir/usr" modules_install
+  make -j $threads INSTALL_MOD_PATH="$pkgdir/usr" modules_install
 
   # a place for external modules,
   # with version file for building modules and running depmod from hook
@@ -150,7 +154,6 @@ _package-headers() {
   cp -t "$builddir" -a include
   cp -t "$builddir/arch/x86" -a arch/x86/include
   install -Dt "$builddir/arch/x86/kernel" -m644 arch/x86/kernel/asm-offsets.s
-  install -Dt "$builddir/arch/x86/kernel" -m644 arch/x86/kernel/macros.s
 
   install -Dt "$builddir/drivers/md" -m644 drivers/md/*.h
   install -Dt "$builddir/net/mac80211" -m644 net/mac80211/*.h
