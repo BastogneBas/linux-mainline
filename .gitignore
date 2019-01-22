@@ -1,0 +1,6 @@
+pkg/
+src/
+linux-mainline*
+config.old
+linux.install.pkg
+
