@@ -13,7 +13,7 @@ pkgbase = linux-mainline
 	makedepends = python-sphinx
 	makedepends = graphviz
 	options = !strip
-	source = linux-mainline::git+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git#tag=v5.0-rc4
+	source = linux-mainline::git+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git#tag=v5.0-rc6
 	source = config
 	source = 60-linux.hook
 	source = 90-linux.hook
