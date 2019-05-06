@@ -8,8 +8,8 @@
 
 pkgbase=linux-mainline               # Build stock -ARCH kernel
 #pkgbase=linux-custom       # Build kernel with a different name
-_tag=v5.1-rc7
-pkgver=5.1rc7
+_tag=v5.1
+pkgver=5.1
 pkgrel=1
 arch=(x86_64)
 url="https://git.archlinux.org/linux.git/log/?h=v$_srcver"
@@ -31,7 +31,7 @@ validpgpkeys=(
   '8218F88849AAC522E94CF470A5E9288C4FA415FA'  # Jan Alexander Steffens (heftig)
 )
 sha256sums=('SKIP'
-            '99fc19ec97642e5a62c52acd5f8e519bf254605376c52fd070699b93abb3cb00'
+            'f36a1b67e7a62f6d08c42c352d74fe1f0b4350f700bf38088955f22610910b3c'
             'ae2e95db94ef7176207c690224169594d49445e04249d2499e9d2fbc117a0b21'
             '834bd254b56ab71d73f59b3221f056c72f559553c04718e350ab2a3e2991afe0'
             'ad6344badc91ad0630caacde83f7f9b97276f80d26a20619a87952be65492c65')
